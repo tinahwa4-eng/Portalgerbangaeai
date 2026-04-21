@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Pendaftaran AEAI</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  color: white;
+  text-align: center;
+  background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+}
+
+.hidden { display: none; }
+
+/* Splash */
+#splash {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle, #0a1f44, #000814);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Animasi teks */
+.fade-text {
+  font-size: 28px;
+  opacity: 0;
+  animation: fadeIn 3s forwards;
+}
+
+@keyframes fadeIn {
+  0% { opacity: 0; transform: scale(0.8); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+/* Form & Card */
+#formPage, #cardPage {
+  background: rgba(0,0,0,0.4);
+  margin: 50px auto;
+  padding: 20px;
+  border-radius: 15px;
+  width: 90%;
+  max-width: 500px;
+  backdrop-filter: blur(10px);
+}
+
+input, textarea {
+  width: 80%;
+  padding: 10px;
+  margin: 10px;
+  border-radius: 8px;
+  border: none;
+}
+
+button {
+  padding: 10px 20px;
+  background: #00b4d8;
+  border: none;
+  border-radius: 8px;
+  color: white;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #0077b6;
+}
+
+h1, h2 {
+  text-shadow: 0 0 10px cyan;
+}
+</style>
+
+</head>
+<body>
+
+<!-- Splash -->
+<div id="splash">
+  <h1 class="fade-text">Selamat datang wahai calon ilmuwan</h1>
+</div>
+
+<!-- Form -->
+<div id="formPage" class="hidden">
+  <h2>Pendaftaran AEAI</h2>
+  <form id="form">
+    <input type="text" id="nama" placeholder="Nama" required><br>
+    <input type="date" id="tgl" required><br>
+    <textarea id="tujuan" placeholder="Tujuan masuk" required></textarea><br>
+    <textarea id="astro" placeholder="Apa yang kamu ketahui tentang astronomi?" required></textarea><br>
+    <button type="submit">Daftar</button>
+  </form>
+</div>
+
+<!-- Kartu -->
+<div id="cardPage" class="hidden">
+  <h2>Kartu Anggota AEAI</h2>
+  <canvas id="cardCanvas" width="400" height="250"></canvas><br>
+  <button id="downloadBtn">Download Kartu</button>
+</div>
+
+<script>
+// Splash ke form
+setTimeout(() => {
+  document.getElementById("splash").style.display = "none";
+  document.getElementById("formPage").classList.remove("hidden");
+}, 3000);
+
+// Form submit
+document.getElementById("form").addEventListener("submit", function(e){
+  e.preventDefault();
+
+  const nama = document.getElementById("nama").value;
+  const tgl = document.getElementById("tgl").value;
+  const tujuan = document.getElementById("tujuan").value;
+
+  document.getElementById("formPage").classList.add("hidden");
+  document.getElementById("cardPage").classList.remove("hidden");
+
+  generateCard(nama, tgl, tujuan);
+});
+
+// Generate kartu
+function generateCard(nama, tgl, tujuan){
+  const canvas = document.getElementById("cardCanvas");
+  const ctx = canvas.getContext("2d");
+
+  // Background batik vibe
+  ctx.fillStyle = "#1b263b";
+  ctx.fillRect(0,0,400,250);
+
+  ctx.fillStyle = "#e0aaff";
+  for(let x=0; x<400; x+=25){
+    for(let y=0; y<250; y+=25){
+      ctx.fillText("✿", x, y);
+    }
+  }
+
+  ctx.fillStyle = "white";
+  ctx.font = "16px Arial";
+
+  ctx.fillText("KARTU AEAI", 140, 30);
+  ctx.fillText("Nama: " + nama, 20, 80);
+  ctx.fillText("TTL: " + tgl, 20, 110);
+  ctx.fillText("Tujuan:", 20, 140);
+  ctx.fillText(tujuan.substring(0,30), 20, 170);
+}
+
+// Download + redirect
+document.getElementById("downloadBtn").addEventListener("click", function(){
+  const canvas = document.getElementById("cardCanvas");
+  const link = document.createElement("a");
+
+  link.download = "kartu_aeai.png";
+  link.href = canvas.toDataURL();
+  link.click();
+
+  setTimeout(() => {
+    window.location.href = "https://chat.whatsapp.com/FoSwKMkxAbo1gJivS3j8mS?mode=gi_t";
+  }, 2000);
+});
+</script>
+
+</body>
+</html>
